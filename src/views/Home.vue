@@ -3,9 +3,7 @@
     <h1>Home</h1>
     <div v-if="error">{{ error }}</div>
     <div v-if="posts.length">
-      <PostList :posts="posts" v-if="showPost" />
-      <button @click="showPost = !showPost">Toggle posts</button>
-      <button @click="posts.pop()">Remove a post</button>
+      <PostList :posts="posts" />
     </div>
     <div v-else>Loading...</div>
   </div>
@@ -14,32 +12,17 @@
 <script>
 import { ref } from "vue";
 import PostList from "../components/PostList.vue";
+import getPosts from "../composables/getPosts";
 
 export default {
   name: "Home",
   components: { PostList },
   setup() {
-    const posts = ref([]);
-    const showPost = ref(true);
-    const error = ref(null)
-
-    const load = async () => {
-      try {
-        let data = await fetch("http://localhost:3000/posts");
-        // console.log(data);
-        if (!data.ok) {
-          throw Error("no data");
-        }
-        posts.value = await data.json();
-      } catch (err) {
-        error.value = err.message;
-        console.log(error.value);
-      }
-    };
+    const {posts, error, load} = getPosts();
 
     load();
 
-    return { posts, showPost, error };
+    return { posts, error };
   },
 };
 </script>
