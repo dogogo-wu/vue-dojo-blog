@@ -11,7 +11,7 @@ export default {
     props: ['post'],
     setup(props){
         const snippet = computed(()=>{
-            return props.post.content.substring(0, 200) + '...'
+            return props.post.body.substring(0, 200) + '...'
         })
 
         return {snippet}
